@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Downloads</title>
+		<style>
+			body {
+				background: black;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+			}
+			#container {
+				display: flex;
+				flex-direction: column;
+				align-items: flex-start;
+				width: 80%;
+			}
+			.listcontainer {
+				color: white;
+				font-size: 2em;
+				padding: 0.2em;
+				border: 2px #704a86 solid;
+				margin: 0.2em 0;
+			}
+			.namecontainer {
+				width: 100%;
+			}
+			.outercontainer {
+				display: flex;
+				flex-direction: row;
+				align-items: flex-start;
+				width: 100%;
+			}
+			.listcontainer a {
+				color: inherit;
+				text-decoration: none;
+			}
+			.listcontainer:hover {
+				color: #5e00ac;
+				background: #d0d0d0;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="container"></div>
+		<script>
+			let logged = [];
+
+			function ignoredExt(str) {
+				let ignoredExtArr = ["html", "json", "sh", "irc", "txt"]
+				if (ignoredExtArr.includes(str)) {
+					return true;
+				} else {
+					return false;
+				}
+			}
+
+			function appendList(arr, prefix) {
+				let newArr = [];
+				arr.forEach(el => {
+					let tmpExt = el.split('.');
+					tmpExt = tmpExt[tmpExt.length - 1];
+					tmpName = el.slice(0, (el.length - tmpExt.length - 1));
+					if (!logged.includes(tmpName) && !ignoredExt(tmpExt) && tmpName.length > 0 && tmpName != "null") {
+						logged.push(tmpName);
+						newArr.push({
+							name: name,
+							url: el
+						});
+					}
+				});
+
+				newArr.forEach(el => {
+					let container = document.createElement('div');
+					// container.id = el.id;
+					container.classList.add('outercontainer');
+
+					let containerName = document.createElement('div');
+					containerName.classList.add('listcontainer');
+					containerName.classList.add('namecontainer');
+
+					let link = document.createElement('a');
+					link.href = el.url;
+					link.innerText = el.url;
+					containerName.append(link);
+
+					container.append(containerName);
+					document.querySelector("#container").append(container);
+				});
+
+				let mainContainer = document.querySelector("#container");
+				Array.from(mainContainer.children).sort((a, b) => {
+					return a.innerText.localeCompare(b.innerText);
+				}).forEach(el => {
+					mainContainer.append(el);
+				});
+			}
+
+			function getFilelist() {
+				fetch("filelist.json", {cache: "no-cache"}).then(data => {
+					data.text().then(
+						jsonText => {
+							appendList(JSON.parse(jsonText).files, "");
+						}
+					)
+				});
+			}
+
+			getFilelist();
+
+			setInterval(getFilelist, 5000);
+		</script>
+	</body>
+</html>

@@ -1,0 +1,21 @@
+version: "3"
+services:
+  dsc-yt-bot:
+    build:
+      context: .
+      args:
+        USER_ID: 1000
+        GROUP_ID: 1000
+    volumes:
+      - .:/app
+    environment:
+      PUBLIC_ADDRESS: "YourPublicWebAddressHere"
+      DISCORD_TOKEN: "YourDiscordBotTokenHere"
+    restart: always
+  static-web-server:
+    image: joseluisq/static-web-server
+    ports:
+      - "5000:80"
+    volumes:
+      - ./downloads/:/public
+    restart: always
