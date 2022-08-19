@@ -7,7 +7,9 @@ import discord
 TOKEN = os.getenv('DISCORD_TOKEN')
 PUBLIC_ADDRESS = os.getenv('PUBLIC_ADDRESS')
 
-client = discord.Client()
+intents = discord.Intents.default()
+intents.message_content = True
+client = discord.Client(intents=intents)
 
 @client.event
 async def on_ready():
