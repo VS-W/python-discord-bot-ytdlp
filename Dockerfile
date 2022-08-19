@@ -13,6 +13,7 @@ WORKDIR /app
 COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 
+COPY options.json options.json
 COPY run.sh run.sh
 
 COPY . .

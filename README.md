@@ -62,3 +62,17 @@ In your Discord channel with the bot invited, command:
 Should output the videos to the "downloads" directory.
 
 A [web server](https://github.com/joseluisq/static-web-server) is deployed listening on port 5000 - modify this in docker-compose.yml, if necessary. Should provide a simple file listing with links for all of the videos in that "downloads" directory, updates via simple polling of the index created by the bot when it downloads a new video (will update to using sockets later on).
+
+# Options
+Arguments can be added to the options.json file, in JSON format. See [here](https://github.com/yt-dlp/yt-dlp/blob/master/yt_dlp/YoutubeDL.py) for the options available.
+
+Example adding the option "writedescription":
+
+    {
+        "quiet": true,
+        "no_warnings": true,
+        "restrict-filenames": true,
+        "outtmpl": "downloads/[%(uploader)s] %(title)s.%(ext)s",
+	    "writedescription": true
+    }
+

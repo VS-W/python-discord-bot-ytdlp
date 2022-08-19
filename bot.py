@@ -7,6 +7,9 @@ import discord
 TOKEN = os.getenv('DISCORD_TOKEN')
 PUBLIC_ADDRESS = os.getenv('PUBLIC_ADDRESS')
 
+with open("options.json") as options_file:
+	ydl_opts = json.load(options_file)
+
 intents = discord.Intents.default()
 intents.message_content = True
 client = discord.Client(intents=intents)
@@ -56,13 +59,8 @@ async def on_message(message):
 
 			logger = Logger()
 
-			ydl_opts = {
-				'quiet': True,
-				'no_warnings': True,
-				'restrict-filenames': True,
-				'outtmpl': 'downloads/[%(uploader)s] %(title)s.%(ext)s',
-				'logger': logger
-			}
+			opts = ydl_opts.copy()
+			opts['logger'] = logger
 
 			with yt_dlp.YoutubeDL(ydl_opts) as ydl:
 				info = ydl.extract_info(videourl, download=False)
