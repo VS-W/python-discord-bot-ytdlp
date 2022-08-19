@@ -1,5 +1,8 @@
 FROM python:3.10-bullseye
 
+RUN apt-get -y update
+RUN apt-get install -y ffmpeg
+
 ARG USER_ID
 ARG GROUP_ID
 
