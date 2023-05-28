@@ -73,6 +73,6 @@ Example adding the option "writedescription":
         "no_warnings": true,
         "restrictfilenames": true,
         "outtmpl": "downloads/%(uploader)s-%(title)s.%(ext)s",
-	"writedescription": true
+        "writedescription": true
     }
 
