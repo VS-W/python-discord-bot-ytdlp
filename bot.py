@@ -73,10 +73,10 @@ async def on_message(message):
 				info = await loop.run_in_executor(None, lambda: ydl.extract_info(videourl, download=True))
 				log = "\n".join(logger.output_msgs)
 				filename = await loop.run_in_executor(None, lambda: ydl.prepare_filename(info))
-				if PUBLIC_ADDRESS and PUBLIC_ADDRESS != "YourPublicWebAddressHere":
-					filename = f"http://{PUBLIC_ADDRESS}/{urlencode(filename.replace('downloads/', ''))}"
 				msg_content += f"\n{log}\nOutput:\n{filename}"
 				await prog_msg.edit(content=msg_content)
+				if PUBLIC_ADDRESS and PUBLIC_ADDRESS != "YourPublicWebAddressHere":
+					filename = f"http://{PUBLIC_ADDRESS}/{urlencode(filename.replace('downloads/', ''))}"
 				res_msg = await message.channel.send(filename)
 
 			with open('downloads/filelist.json', 'w') as f:
