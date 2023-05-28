@@ -1,4 +1,4 @@
-# pydscbotytdlp
+# YTDLP called via Discord commands → locally hosted downloads
 On your server, assuming it's Debian based (e.g. Ubuntu, Raspberry Pi, etc.):
 
     sudo apt install docker.io docker-compose git
