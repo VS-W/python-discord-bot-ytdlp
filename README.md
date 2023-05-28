@@ -2,8 +2,8 @@
 On your server, assuming it's Debian based (e.g. Ubuntu, Raspberry Pi, etc.):
 
     sudo apt install docker.io docker-compose git
-    git clone https://github.com/vsiy/public-pydscbotytdlp/
-    cd public-pydscbotytdlp
+    git clone https://github.com/VS-W/python-discord-bot-ytdlp
+    cd python-discord-bot-ytdlp
 
 Replace the values for User ID/Group ID/DISCORD_TOKEN in docker-compose.yml with your own. Replace PUBLIC_ADDRESS with the address of your server, web server runs on port 5000 unless modified (e.g. "192.168.5.52:5000" or "subdomain.domain.tld").
 
@@ -71,8 +71,8 @@ Example adding the option "writedescription":
     {
         "quiet": true,
         "no_warnings": true,
-        "restrict-filenames": true,
-        "outtmpl": "downloads/[%(uploader)s] %(title)s.%(ext)s",
-	    "writedescription": true
+        "restrictfilenames": true,
+        "outtmpl": "downloads/%(uploader)s-%(title)s.%(ext)s",
+	"writedescription": true
     }
 
