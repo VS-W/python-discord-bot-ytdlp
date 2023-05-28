@@ -77,6 +77,7 @@ async def on_message(message):
 					filename = f"http://{PUBLIC_ADDRESS}/{urlencode(filename.replace('downloads/', ''))}"
 				msg_content += f"\n{log}\nOutput:\n{filename}"
 				await prog_msg.edit(content=msg_content)
+				res_msg = await message.channel.send(filename)
 
 			with open('downloads/filelist.json', 'w') as f:
 				json.dump({"files" : os.listdir('downloads')}, f)
