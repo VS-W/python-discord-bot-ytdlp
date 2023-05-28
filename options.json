@@ -1,6 +1,6 @@
 {
 	"quiet": true,
 	"no_warnings": true,
-	"restrict-filenames": true,
+	"restrictfilenames": true,
 	"outtmpl": "downloads/[%(uploader)s] %(title)s.%(ext)s"
 }
