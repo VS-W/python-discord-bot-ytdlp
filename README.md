@@ -76,7 +76,7 @@ Example adding the options for "writedescription" and file "format":
         "no_warnings": true,
         "restrictfilenames": true,
         "outtmpl": "downloads/%(uploader)s-%(title)s.%(ext)s",
-        "format": "bestvideo[vcodec^=avc1][filesize<?150M][ext=mp4]+bestaudio[acodec^=mp4a]/best[filesize<?150M]"
+        "format": "bestvideo[vcodec^=avc1][filesize<?150M][ext=mp4]+bestaudio[acodec^=mp4a]/best[filesize<?150M]",
         "writedescription": true
     }
 
