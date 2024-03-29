@@ -76,8 +76,8 @@ Example adding the options for "writedescription" and file "format":
         "no_warnings": true,
         "restrictfilenames": true,
         "outtmpl": "downloads/%(uploader)s-%(title)s.%(ext)s",
-        "format": "bestvideo[vcodec^=avc1][filesize<?150M][ext=mp4]+bestaudio[acodec^=mp4a]/best",
+        "format": "bestvideo[vcodec^=avc1][filesize<?100M][ext=mp4]+bestaudio[acodec^=mp4a]/best",
         "writedescription": true
     }
 
-Restricting the format to H264 in an MP4 container and approximately 150M in size or less as in the above example seems work well for automatic embedding, with the obvious loss of quality for longer videos being forced into those constraints - fall back to just downloading the best available if that's not possible, since any video is better than none.
+Restricting the format to H264 in an MP4 container and approximately 100M in size or less as in the above example seems work well for automatic embedding, with the obvious loss of quality for longer videos being forced into those constraints - fall back to just downloading the best available if that's not possible, since any video is better than none.
