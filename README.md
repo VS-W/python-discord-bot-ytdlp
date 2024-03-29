@@ -5,7 +5,7 @@ On your server, assuming it's Debian based (e.g. Ubuntu, Raspberry Pi, etc.):
     git clone https://github.com/VS-W/python-discord-bot-ytdlp
     cd python-discord-bot-ytdlp
 
-Replace the values for User ID/Group ID/DISCORD_TOKEN in docker-compose.yml with your own. Replace PUBLIC_ADDRESS with the address of your server, web server runs on port 5000 unless modified (e.g. "192.168.5.52:5000" or "subdomain.domain.tld").
+Replace the values for User ID/Group ID/DISCORD_TOKEN in docker-compose.yml with your own. Replace PUBLIC_ADDRESS with the address of your server, web server runs on port 5000 unless modified (e.g. "162.168.56.52:5000" or "subdomain.domain.tld").
 
 Run the following to see your IDs:
 
@@ -22,7 +22,7 @@ Get your discord token from [here](https://discordapp.com/developers/application
  - Under the "Bot Permissions" field, check "Read Messages/View Channels" and "Send Messages" - that's all this bot requires.
  - Scroll down and click "copy" on the generated URL, and open the URL in your web browser and authorize it.
  
-Example running on 192.168.5.52 port 8500:
+Example running on 162.168.56.52 port 8500:
 
 
     version: "3"
@@ -36,7 +36,7 @@ Example running on 192.168.5.52 port 8500:
         volumes:
           - .:/app
         environment:
-          PUBLIC_ADDRESS: "192.168.5.52:8500"
+          PUBLIC_ADDRESS: "162.168.56.52:8500"
           DISCORD_TOKEN: "J8BDCVIspV60BroJPBCQAtucGr2muxaA70Mbtb003h0gJ2gZ5AjBu5kGVBjfRvCUYUuKWg8d"
         restart: always
       static-web-server:
@@ -69,13 +69,15 @@ Works for anything YT-DLP can download, e.g.:
 # Options
 Arguments can be added to the options.json file, in JSON format. See [here](https://github.com/yt-dlp/yt-dlp/blob/master/yt_dlp/YoutubeDL.py) for the options available.
 
-Example adding the option "writedescription":
+Example adding the options for "writedescription" and file "format":
 
     {
         "quiet": true,
         "no_warnings": true,
         "restrictfilenames": true,
         "outtmpl": "downloads/%(uploader)s-%(title)s.%(ext)s",
+        "format": "bestvideo[vcodec^=avc1][filesize<?150M][ext=mp4]+bestaudio[acodec^=mp4a]/best[filesize<?150M]"
         "writedescription": true
     }
 
+Restricting the format to H264 in an MP4 container and approximately 150M in size or less as in the above example seems work well for automatic embedding, with the obvious loss of quality for longer videos being forced into those constraints.
