@@ -67,7 +67,7 @@ async def on_message(message):
 			with yt_dlp.YoutubeDL(opts) as ydl:
 				info = await loop.run_in_executor(None, lambda: ydl.extract_info(videourl, download=False))
 				title = info["title"]
-				msg_content = f"Attempting to DL: <{videourl}>\nTitle: {title}\nDownloading..."
+				msg_content = f"Attempting to DL: <{videourl}>\nTitle: {title}\nOptions: {ydl_opts}\nDownloading..."
 				await prog_msg.edit(content=msg_content)
 
 				info = await loop.run_in_executor(None, lambda: ydl.extract_info(videourl, download=True))
