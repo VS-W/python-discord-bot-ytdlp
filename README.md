@@ -81,3 +81,10 @@ Example adding the options for "writedescription" and file "format":
     }
 
 Restricting the format to H264 in an MP4 container and approximately 100M in size or less as in the above example seems work well for automatic embedding, with the obvious loss of quality for longer videos being forced into those constraints - fall back to just downloading the best available if that's not possible, since any video is better than none.
+
+# Notes
+
+* It is only serving files over http - the direct download links will display warnings in browsers since it's not secure.
+* Works without a domain (i.e. using only the server IP), but with the caveat that the embedded videos will not play properly directly Discord - clicking the link the bot generates still renders a playable video, however.
+
+Personally running it on an existing server behind proxied behind nginx and Cloudflare handling certs and redirecting to https.
