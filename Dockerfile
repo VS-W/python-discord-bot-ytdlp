@@ -18,7 +18,8 @@ RUN pip install -r requirements.txt
 
 COPY options.json options.json
 COPY run.sh run.sh
+COPY bot.py bot.py
 
-COPY . .
+# COPY . .
 
 CMD ["bash", "run.sh"]

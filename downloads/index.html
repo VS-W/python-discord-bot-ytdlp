@@ -48,7 +48,7 @@
 			let logged = [];
 
 			function ignoredExt(str) {
-				let ignoredExtArr = ["html", "json", "sh", "irc", "txt"]
+				let ignoredExtArr = ["html", "json", "sh", "irc", "txt", "description"]
 				if (ignoredExtArr.includes(str)) {
 					return true;
 				} else {
@@ -59,14 +59,11 @@
 			function appendList(arr, prefix) {
 				let newArr = [];
 				arr.forEach(el => {
-					let tmpExt = el.split('.');
-					tmpExt = tmpExt[tmpExt.length - 1];
-					tmpName = el.slice(0, (el.length - tmpExt.length - 1));
-					if (!logged.includes(tmpName) && !ignoredExt(tmpExt) && tmpName.length > 0 && tmpName != "null") {
-						logged.push(tmpName);
+					if (!logged.includes(el["folder"])) {
+						logged.push(el["folder"]);
 						newArr.push({
-							name: name,
-							url: el
+							name: el["title"],
+							url: el["filename"]
 						});
 					}
 				});
@@ -82,7 +79,7 @@
 
 					let link = document.createElement('a');
 					link.href = el.url;
-					link.innerText = el.url;
+					link.innerText = el.name;
 					containerName.append(link);
 
 					container.append(containerName);
