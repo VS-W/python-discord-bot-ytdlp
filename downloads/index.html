@@ -1,112 +1,143 @@
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<title>Downloads</title>
-		<style>
-			body {
-				background: black;
-				display: flex;
-				flex-direction: column;
-				align-items: center;
-			}
-			#container {
-				display: flex;
-				flex-direction: column;
-				align-items: flex-start;
-				width: 80%;
-			}
-			.listcontainer {
-				color: white;
-				font-size: 2em;
-				padding: 0.2em;
-				border: 2px #704a86 solid;
-				margin: 0.2em 0;
-			}
-			.namecontainer {
-				width: 100%;
-			}
-			.outercontainer {
-				display: flex;
-				flex-direction: row;
-				align-items: flex-start;
-				width: 100%;
-			}
-			.listcontainer a {
-				color: inherit;
-				text-decoration: none;
-			}
-			.listcontainer:hover {
-				color: #5e00ac;
-				background: #d0d0d0;
-			}
-		</style>
-	</head>
-	<body>
-		<div id="container"></div>
-		<script>
-			let logged = [];
 
-			function ignoredExt(str) {
-				let ignoredExtArr = ["html", "json", "sh", "irc", "txt", "description"]
-				if (ignoredExtArr.includes(str)) {
-					return true;
-				} else {
-					return false;
-				}
-			}
+<head>
+	<meta charset="utf-8">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
 
-			function appendList(arr, prefix) {
-				let newArr = [];
-				arr.forEach(el => {
-					if (!logged.includes(el["folder"])) {
-						logged.push(el["folder"]);
-						newArr.push({
-							name: el["title"],
-							url: el["filename"]
-						});
+	<title>Downloads</title>
+
+	<style>
+		body {
+			background: rgb(32, 32, 32);
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
+
+		#container {
+			display: flex;
+			flex-direction: row;
+			flex-wrap: wrap;
+			justify-content: space-evenly;
+			width: 90%;
+		}
+
+		.outercontainer {
+			display: flex;
+			flex-direction: row;
+			width: 250px;
+			padding: 0.5em;
+		}
+
+		.outercontainer a {
+			border: 2px #ffffff00 solid;
+			text-decoration: none;
+			color: white;
+		}
+
+		.outercontainer > a:hover {
+			border: 2px #704a86 solid;
+		}
+
+		.namecontainer {
+			display: flex;
+			flex-direction: column;
+			width: 250px;
+			overflow: hidden;
+		}
+		.namecontainer a {
+			font-family: "Nunito", sans-serif;
+			color: white;
+			font-size: 1em;
+			text-decoration: none;
+			text-align: left;
+
+			display: -webkit-box;
+			-webkit-line-clamp: 2;
+			line-clamp: 2; 
+			-webkit-box-orient: vertical;
+		}
+
+		.thumbnail {
+			width: 250px;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="container"></div>
+	<script>
+		let logged = [];
+
+		function stripExtension(filename) {
+			const lastDotIndex = filename.lastIndexOf('.');
+			if (lastDotIndex === -1) {
+				return filename;
+			}
+			return filename.slice(0, lastDotIndex);
+		}
+
+		function appendList(arr) {
+			let newArr = [];
+			arr.forEach(el => {
+				if (!logged.includes(el["folder"])) {
+					logged.push(el["folder"]);
+					let elObj = {
+						name: el["title"],
+						url: el["filename"]
+					};
+
+					if (el["thumbnail_ext"]) {
+						elObj["thumbnail"] = stripExtension(el["filename"]) + "." + el["thumbnail_ext"];
 					}
-				});
+					newArr.push(elObj);
 
-				newArr.forEach(el => {
-					let container = document.createElement('div');
-					// container.id = el.id;
-					container.classList.add('outercontainer');
+					console.log(elObj);
+				}
+			});
 
-					let containerName = document.createElement('div');
-					containerName.classList.add('listcontainer');
-					containerName.classList.add('namecontainer');
+			newArr.forEach(el => {
+				let linkContainer = document.createElement('a');
+				linkContainer.href = el.url;
 
-					let link = document.createElement('a');
-					link.href = el.url;
-					link.innerText = el.name;
-					containerName.append(link);
+				let thumbnail = document.createElement('img');
+				thumbnail.src = el["thumbnail"];
+				thumbnail.classList.add('thumbnail');
+				linkContainer.append(thumbnail);
 
-					container.append(containerName);
-					document.querySelector("#container").append(container);
-				});
+				let nameContainer = document.createElement('div');
+				nameContainer.classList.add('namecontainer');
+				linkContainer.append(nameContainer);
 
-				let mainContainer = document.querySelector("#container");
-				Array.from(mainContainer.children).sort((a, b) => {
-					return a.innerText.localeCompare(b.innerText);
-				}).forEach(el => {
-					mainContainer.append(el);
-				});
-			}
+				let link = document.createElement('a');
+				link.href = el.url;
+				link.innerText = el.name;
+				nameContainer.append(link);
 
-			function getFilelist() {
-				fetch("filelist.json", {cache: "no-cache"}).then(data => {
-					data.text().then(
-						jsonText => {
-							appendList(JSON.parse(jsonText).files, "");
-						}
-					)
-				});
-			}
+				let outerContainer = document.createElement('div');
+				outerContainer.classList.add('outercontainer');
+				outerContainer.append(linkContainer);
+				document.querySelector("#container").prepend(outerContainer);
+			});
+		}
 
-			getFilelist();
+		function getFilelist() {
+			fetch("filelist.json", { cache: "no-cache" }).then(data => {
+				data.text().then(
+					jsonText => {
+						appendList(JSON.parse(jsonText).files);
+					}
+				)
+			});
+		}
 
-			setInterval(getFilelist, 5000);
-		</script>
-	</body>
+		getFilelist();
+
+		setInterval(getFilelist, 5000);
+	</script>
+</body>
+
 </html>
