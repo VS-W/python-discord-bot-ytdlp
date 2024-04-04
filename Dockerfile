@@ -1,6 +1,7 @@
-FROM python:3.10-bullseye
+FROM python:3.12-slim-bookworm
 
 RUN apt-get -y update
+RUN apt-get -y upgrade
 RUN apt-get install -y ffmpeg
 
 ARG USER_ID
@@ -14,8 +15,6 @@ USER user
 WORKDIR /app
 
 COPY requirements.txt requirements.txt
-RUN pip install -r requirements.txt
-
 COPY options.json options.json
 COPY run.sh run.sh
 COPY bot.py bot.py
