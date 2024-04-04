@@ -53,7 +53,7 @@ class Logger(object):
 			if line in msg:
 				append = False
 		if append:
-			msg = msg.replace('_', '\_')
+			msg = msg.replace('_', '\\_')
 
 			if "/s ETA " in msg:
 				if "/s ETA " in self.valid_msgs[-1]:
@@ -103,7 +103,7 @@ async def on_message(message):
 				info = await loop.run_in_executor(None, lambda: ydl.extract_info(videourl, download=False))
 				title = info['title']
 				video_id = info['id']
-				msg_content = f'Title: {title}\nOptions: {ydl_opts_str}\nDownloading...'.replace('_', '\_')
+				msg_content = f'Title: {title}\nOptions: {ydl_opts_str}\nDownloading...'.replace('_', '\\_')
 
 				await logger.update_msg(msg_content)
 
