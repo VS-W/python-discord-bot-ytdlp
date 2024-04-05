@@ -8,6 +8,28 @@ import discord
 
 TOKEN = os.getenv('DISCORD_TOKEN')
 PUBLIC_ADDRESS = os.getenv('PUBLIC_ADDRESS')
+QUIET = os.getenv('QUIET')
+
+if QUIET and QUIET.lower() == "true":
+	QUIET = True
+else:
+	QUIET = False
+
+IGNORED_MSGS = [
+	": Downloading webpage",
+	": Downloading android player API JSON",
+	"Deleting original file",
+	"(frag",
+	"[youtube]",
+	"[info] Downloading video thumbnail",
+	"[info] Video Thumbnail"
+]
+
+if QUIET:
+	IGNORED_MSGS = IGNORED_MSGS + [
+		"[info] ",
+		"[Merger] "
+	]
 
 with open('options.json') as options_file:
 	ydl_opts = json.load(options_file)
@@ -39,24 +61,15 @@ class Logger(object):
 		print(msg, flush=True)
 		self.output_msgs.append(msg)
 
-		ignored_msgs = [
-			": Downloading webpage",
-			": Downloading android player API JSON",
-			"Deleting original file",
-			"(frag",
-			"[youtube]",
-			"[info] Downloading video thumbnail",
-			"[info] Video Thumbnail"
-		]
 		append = True
-		for line in ignored_msgs:
+		for line in IGNORED_MSGS:
 			if line in msg:
 				append = False
 		if append:
 			msg = msg.replace('_', '\\_')
 
-			if "/s ETA " in msg:
-				if "/s ETA " in self.valid_msgs[-1]:
+			if "[download] " in msg:
+				if "[download] " in self.valid_msgs[-1]:
 					self.valid_msgs[-1] = msg
 				else:
 					self.valid_msgs.append(msg)
@@ -85,8 +98,8 @@ async def on_message(message):
 		if message.author == client.user:
 			return
 
-		if '!yt' in message.content:
-			videourl = message.content.split('!yt ')[1]
+		if '!yt' == message.content[:3].lower():
+			videourl = message.content[4:]
 
 			msg_content = f'Attempting to DL: <{videourl}>'
 			print(msg_content, flush=True)
@@ -103,7 +116,10 @@ async def on_message(message):
 				info = await loop.run_in_executor(None, lambda: ydl.extract_info(videourl, download=False))
 				title = info['title']
 				video_id = info['id']
-				msg_content = f'Title: {title}\nOptions: {ydl_opts_str}\nDownloading...'.replace('_', '\\_')
+				if QUIET:
+					msg_content = f'Title: {title}\nDownloading...'.replace('_', '\\_')
+				else:
+					msg_content = f'Title: {title}\nOptions: {ydl_opts_str}\nDownloading...'.replace('_', '\\_')
 
 				await logger.update_msg(msg_content)
 
