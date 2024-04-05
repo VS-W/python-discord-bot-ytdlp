@@ -38,6 +38,7 @@ Example running on 162.168.56.52 port 8500:
         environment:
           PUBLIC_ADDRESS: "162.168.56.52:8500"
           DISCORD_TOKEN: "J8BDCVIspV60BroJPBCQAtucGr2muxaA70Mbtb003h0gJ2gZ5AjBu5kGVBjfRvCUYUuKWg8d"
+		  QUIET: "true"
         restart: always
       static-web-server:
         image: joseluisq/static-web-server
@@ -47,6 +48,7 @@ Example running on 162.168.56.52 port 8500:
           - ./downloads/:/public
         restart: always
 
+Change the value of the "QUIET" variable to false if you want to see most of the relevant output of the Youtube-DLP call in the message from the bot, otherwise it will only emit the title, download progress, current status, and any errors.
 
 Back on your server, run the following in the same directory you cloned the repo to:
 
