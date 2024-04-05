@@ -40,12 +40,13 @@ Example running on 162.168.56.52 port 8500:
           DISCORD_TOKEN: "J8BDCVIspV60BroJPBCQAtucGr2muxaA70Mbtb003h0gJ2gZ5AjBu5kGVBjfRvCUYUuKWg8d"
           QUIET: "true"
         restart: always
-      static-web-server:
-        image: joseluisq/static-web-server
+      nginx:
+        image: nginx:latest
         ports:
           - "8500:80"
         volumes:
-          - ./downloads/:/public
+          - ./downloads:/usr/share/nginx/html:ro
+          - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
         restart: always
 
 Change the value of the "QUIET" variable to false if you want to see most of the relevant output of the Youtube-DLP call in the message from the bot, otherwise it will only emit the title, download progress, current status, and any errors.
