@@ -19,4 +19,6 @@ COPY options.json options.json
 COPY run.sh run.sh
 COPY bot.py bot.py
 
+RUN pip install --no-warn-script-location -r requirements.txt
+
 CMD ["bash", "run.sh"]
