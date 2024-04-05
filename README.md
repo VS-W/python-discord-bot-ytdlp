@@ -38,7 +38,7 @@ Example running on 162.168.56.52 port 8500:
         environment:
           PUBLIC_ADDRESS: "162.168.56.52:8500"
           DISCORD_TOKEN: "J8BDCVIspV60BroJPBCQAtucGr2muxaA70Mbtb003h0gJ2gZ5AjBu5kGVBjfRvCUYUuKWg8d"
-		  QUIET: "true"
+          QUIET: "true"
         restart: always
       static-web-server:
         image: joseluisq/static-web-server
