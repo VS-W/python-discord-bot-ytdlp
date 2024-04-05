@@ -87,4 +87,4 @@ Restricting the format to H264 in an MP4 container and approximately 100M in siz
 * It is only serving files over http - the direct download links will display warnings in browsers since it's not secure.
 * Works without a domain (i.e. using only the server IP), but with the caveat that the embedded videos will not play properly directly Discord - clicking the link the bot generates still renders a playable video, however.
 
-Personally running it on an existing server behind proxied behind nginx and Cloudflare handling certs and redirecting to https.
+Personally running it on an existing server proxied behind nginx and Cloudflare handling certs and redirecting to https.
