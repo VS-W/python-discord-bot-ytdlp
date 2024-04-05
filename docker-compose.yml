@@ -11,6 +11,7 @@ services:
     environment:
       PUBLIC_ADDRESS: "YourPublicWebAddressHere"
       DISCORD_TOKEN: "YourDiscordBotTokenHere"
+      QUIET: "true"
     restart: always
   nginx:
     image: nginx:latest
