@@ -3,6 +3,9 @@
 
 <head>
 	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	<link rel="shortcut icon" href="data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAADsUlEQVRYw7WXy28bVRSHv3l4PH5M4oRkrsi0FY+UlhSVt1ggoSIqoCCxqZBYwIo/gEpsuikbBAgVsYA/oAs2rNiAoErTRRFIVBQIUtMFqyjpVJ1R4jzscZxxZoaF7WTijONH7bM85/h+5/x879xzJfow17F14HVgpuFaiGBWCGu717WkHsEa8BFwERhvCa8Cn0VI3wgxFQy8ANexHwN+AJ7ukHoTeNcU1nI368pdwl8GbiXBgx2fzY37hOFu0y8Bf7iO/cxACmjAZ4GxpHitVsXfLlPxinH3FHDddezTD1SA69jHgZ+AbLscRdXqSgR+a2gc+Nl17KOHMdruAdexDeAf4PE6oMbm+j0kWaEwdmRfbrVaQlVSqCk9aalbwCumsLZ6VeBKEw7glVcIghqKrB5I1HWjHRzgBeByTwq4jv0+8F3cVy6tEEUBufwEsqzQh71lCuuXjgW4jj0B/EebTXeYRVFEEPioajopvATMmMLy4s6kv+DLfuBhGLBeXGK9uIzvV5JSjgGfHKpA49j82yscoOKtUfFWUZQUhfGjSFLi9qoCT5rCWmw6WnfUp62/8P0K1a0NJEkml38IOWETAqT1PLIsk9aNdnAAHbgEfHhAgXbdb6zdpVarAmCMCNK60Y9AcQuA6aYK8XYuJGVn8ia/XvuRbb+GnhnpmnJi+gkeOXaEMAzQtExcFaXBurCrgOvYY4ANZFoX+mv+bz6+fLHnNg09y5UvvgIgpWUZLUzFw2uAZQprq1nW+SQ4gF+r9aVzqVpBS+fRtBzZ7IFDNQa8A3vH8HxflE4qjApGCg+T0hJ7ew9Adpx7KeDVYRTQwc66zl1ZlYheBA58usIwIAx3iKJwWAXkQXpeBU61RipekYq3BkSUNu8PU4XTMvXhYdeqWxuN4SIaKMnf9lqHFgBLBfZNEjV/79pWUzp5w3xgeLVaorzpAKBnRuO36Y4K/BlPzhmTpNI5FFklpWWQZXsA3ZcByBuTrVf5TdkU1hww3/TIsoKuG+2OTl9mjAjGJx5Fz4zG3fOmsK43vwMfAF7vS3dnkiS3du41mPUPkSms28CbwMqwiojZKvBGg7k3kJjC+g14Drg6RPhV4FlTWL83HfsublNYy6awzlF/990YIPhGo+tzrS+mxMnBFNY1U1hngOnFpcXv+8ZGXAKOm8I6YwprNiml49tw5uypSeBb4G0g3yV6Ffj6ztzC550Su36cnnjtpKRIylPASerXaQFojkcVoAisAwt35hZud7vu/028G+jXb+4+AAAAAElFTkSuQmCC" />
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
@@ -15,6 +18,13 @@
 			display: flex;
 			flex-direction: column;
 			align-items: center;
+		}
+
+		h1 {
+			font-family: "Nunito", sans-serif;
+			color: white;
+			font-size: 2em;
+			margin: 0.3em;
 		}
 
 		#container {
@@ -63,11 +73,14 @@
 
 		.thumbnail {
 			width: 250px;
+			max-height: 141px;
+			object-fit: cover;
 		}
 	</style>
 </head>
 
 <body>
+	<h1>Downloads</h1>
 	<div id="container"></div>
 	<script>
 		let logged = [];
@@ -136,7 +149,7 @@
 
 		getFilelist();
 
-		setInterval(getFilelist, 5000);
+		// setInterval(getFilelist, 5000);
 	</script>
 </body>
 
