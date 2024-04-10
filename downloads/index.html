@@ -87,7 +87,7 @@
 
 		function stripExtension(filename) {
 			const lastDotIndex = filename.lastIndexOf('.');
-			if (lastDotIndex === -1) {
+			if (lastDotIndex == -1) {
 				return filename;
 			}
 			return filename.slice(0, lastDotIndex);
@@ -147,9 +147,50 @@
 			});
 		}
 
-		getFilelist();
+		// getFilelist();
 
-		// setInterval(getFilelist, 5000);
+		// const evtSource = new EventSource("/sse/");
+
+		// evtSource.onmessage = (e) => {
+		// 	console.log(e);
+		// 	// `message: ${e.data}`
+		// };
+
+		// const eventSource = new EventSource("/sse/");
+
+		// // Log something when the client connects to the server.
+		// eventSource.onconnect = (event) => console.log("connected to the server");
+
+		// // Log a message while closing the connection.
+		// eventSource.onclose = (event) => console.log("closing connection");
+
+		// // Log an error message on account of an error.
+		// eventSource.onerror = (event) => console.log("an error occured");
+
+		// // This is how you can attach an event listener to a custom event.
+		// // eventSource.addEventListener("start", (event) => {
+		// // 	console.log(`start event: ${event.data}`);
+		// // });
+
+		// // Log the default message.
+		// eventSource.onmessage = (event) => {
+		// 	console.log(`Default event: ${event.data}`);
+		// 	console.log((new Date(event.data * 1000)).toLocaleString())
+
+		// 	// Don't reconnect when the server closes the connection.
+		// 	if (event.data === "closing connection") {
+		// 		eventSource.close();
+		// 	}
+		// };
+
+		function startES() {
+			const es = new EventSource("/sse");
+			es.onopen = e => console.log("ES open");
+			es.onerror = e => console.log("ES error");
+			es.onmessage = e => console.log(e.data);
+		}
+
+		startES();
 	</script>
 </body>
 

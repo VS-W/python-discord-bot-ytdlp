@@ -1,7 +1,0 @@
-{
-	"quiet": true,
-	"no_warnings": true,
-	"restrictfilenames": true,
-	"outtmpl": "downloads/%(uploader)s-%(title)s.%(ext)s",
-	"writethumbnail": true
-}

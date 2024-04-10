@@ -1,5 +1,8 @@
 FROM python:3.12-slim-bookworm
 
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
 RUN apt-get -y update
 RUN apt-get -y upgrade
 RUN apt-get install -y ffmpeg
@@ -14,10 +17,8 @@ USER user
 
 WORKDIR /app
 
-COPY requirements.txt requirements.txt
-COPY options.json options.json
-COPY run.sh run.sh
-COPY bot.py bot.py
+COPY app/requirements.txt requirements.txt
+COPY app/run.sh run.sh
 
 RUN pip install --no-warn-script-location -r requirements.txt
 
