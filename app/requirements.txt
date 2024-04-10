@@ -1,0 +1,6 @@
+aiosqlite
+discord.py
+starlette
+sse-starlette
+uvicorn
+yt-dlp
