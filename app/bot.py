@@ -92,7 +92,7 @@ async def setup_db():
 	async with aiosqlite.connect("downloads.db") as db:
 		await db.execute('''
 			CREATE TABLE IF NOT EXISTS downloads (
-				id integer primary key unique,
+				id integer primary key,
 				folder TEXT unique,
 				filename TEXT,
 				title TEXT,

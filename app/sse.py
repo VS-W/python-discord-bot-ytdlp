@@ -57,10 +57,6 @@ async def fetch_rows(min_row=0, max_row=None, max_count=100):
 
 		output = await output.fetchall()
 
-		for row in output:
-			print(row[0], end=", ")
-		print(f"\nTotal: {len(output)}\n---")
-
 	return output
 
 async def sse(request):
