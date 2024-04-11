@@ -92,8 +92,8 @@ async def setup_db():
 	async with aiosqlite.connect("downloads.db") as db:
 		await db.execute('''
 			CREATE TABLE IF NOT EXISTS downloads (
-				id integer primary key,
-				folder TEXT,
+				id integer primary key unique,
+				folder TEXT unique,
 				filename TEXT,
 				title TEXT,
 				video_id TEXT,
@@ -109,6 +109,31 @@ def send_sse(message):
 	client_socket.send(message.encode())
 
 	client_socket.close()
+
+async def insert_row(video_info_obj):
+	async with aiosqlite.connect("downloads.db") as db:
+		cursor = await db.execute(f'''
+			INSERT OR IGNORE INTO downloads (
+				folder,
+				filename,
+				title,
+				video_id,
+				thumbnail_ext
+			)
+			VALUES (
+				"{video_info_obj["folder"]}",
+				"{video_info_obj["filename"]}",
+				"{video_info_obj["title"]}",
+				"{video_info_obj["video_id"]}",
+				"{video_info_obj["thumbnail_ext"]}"
+			)
+		''')
+		await db.commit()
+		video_info_obj = {
+			"data": video_info_obj,
+			"id": cursor.lastrowid
+		}
+	return video_info_obj
 
 @client.event
 async def on_ready():
@@ -184,6 +209,17 @@ async def on_message(message):
 					break
 
 			print(output_info)
+			with open('downloads/' + video_string_hash + '/info.json', 'w') as f:
+				json.dump(output_info, f, indent=4)
+
+# TODO: remove, temporarily writing to a file to rebuild db from
+# future rebuilds should be done using the info.json files written with each new download
+			with open('downloads/filelist.json', 'r+') as f:
+				files_arr = json.load(f)
+				files_arr["files"].append(output_info)
+				f.seek(0)
+				json.dump(files_arr, f, indent=4)
+				f.truncate()
 			
 			inserted_row = await insert_row(output_info)
 			send_sse(json.dumps(inserted_row))
@@ -201,34 +237,23 @@ async def on_message(message):
 
 async def main():
 	await setup_db()
+	# loop = asyncio.get_event_loop()
+	# discordbot = loop.create_task(client.start(TOKEN))
+	# await asyncio.wait([discordbot])
 
-	loop = asyncio.get_event_loop()
-	discordbot = loop.create_task(client.start(TOKEN))
-	await asyncio.wait([discordbot])
+# TODO: remove, temporarily dropping and rebuilding from a list
+	async with aiosqlite.connect("downloads.db") as db:
+		await db.execute('''
+			DROP TABLE downloads;
+		''')
+	await setup_db()
+
+	imported = []
+	with open('downloads/filelist.json', 'r+') as f:
+		files_arr = json.load(f)
+		imported = files_arr["files"]
+
+	for info in imported:
+		await insert_row(info)
 
 asyncio.run(main())
-
-async def insert_row(video_info_obj):
-	async with aiosqlite.connect("downloads.db") as db:
-		cursor = await db.execute(f'''
-			INSERT INTO downloads (
-				folder,
-				filename,
-				title,
-				video_id,
-				thumbnail_ext
-			)
-			VALUES (
-				"{video_info_obj["folder"]}",
-				"{video_info_obj["filename"]}",
-				"{video_info_obj["title"]}",
-				"{video_info_obj["video_id"]}",
-				"{video_info_obj["thumbnail_ext"]}"
-			)
-		''')
-		await db.commit()
-		video_info_obj = {
-			"data": video_info_obj,
-			"id": cursor.lastrowid
-		}
-	return video_info_obj
