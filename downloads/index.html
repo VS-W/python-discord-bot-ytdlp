@@ -99,10 +99,9 @@
 
 		function appendList(arr) {
 			let newArr = [];
-
-			// console.log(arr);
-			// console.log(arr.sort((a, b) => {return a.id - b.id;}));
-			arr.sort((a, b) => {return a.id - b.id;}).forEach(el => {
+			arr.sort((a, b) => {
+				return a.id - b.id;
+			}).forEach(el => {
 				if (!logged.includes(el["folder"])) {
 					logged.push(el["folder"]);
 					let elObj = {
