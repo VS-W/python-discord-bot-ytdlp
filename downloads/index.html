@@ -84,6 +84,10 @@
 	<div id="container"></div>
 	<script>
 		let logged = [];
+		let reconnect_timeout = 2000;
+
+		getFilelist();
+		setTimeout(initSSE, 2000);
 
 		function stripExtension(filename) {
 			const lastDotIndex = filename.lastIndexOf('.');
@@ -95,20 +99,22 @@
 
 		function appendList(arr) {
 			let newArr = [];
-			arr.forEach(el => {
+
+			// console.log(arr);
+			// console.log(arr.sort((a, b) => {return a.id - b.id;}));
+			arr.sort((a, b) => {return a.id - b.id;}).forEach(el => {
 				if (!logged.includes(el["folder"])) {
 					logged.push(el["folder"]);
 					let elObj = {
 						name: el["title"],
-						url: el["filename"]
+						url: encodeURIComponent(el["filename"]),
+						id: el['id']
 					};
 
 					if (el["thumbnail_ext"]) {
-						elObj["thumbnail"] = stripExtension(el["filename"]) + "." + el["thumbnail_ext"];
+						elObj["thumbnail"] = stripExtension(encodeURIComponent(el["filename"])) + "." + el["thumbnail_ext"];
 					}
 					newArr.push(elObj);
-
-					console.log(elObj);
 				}
 			});
 
@@ -117,7 +123,7 @@
 				linkContainer.href = el.url;
 
 				let thumbnail = document.createElement('img');
-				thumbnail.src = el["thumbnail"];
+				thumbnail.src = el['thumbnail'];
 				thumbnail.classList.add('thumbnail');
 				linkContainer.append(thumbnail);
 
@@ -133,64 +139,62 @@
 				let outerContainer = document.createElement('div');
 				outerContainer.classList.add('outercontainer');
 				outerContainer.append(linkContainer);
-				document.querySelector("#container").prepend(outerContainer);
+
+				let mainContainer = document.querySelector('#container');
+				mainContainer.prepend(outerContainer);
+				if (mainContainer.children.length > 20) {
+					mainContainer.removeChild(mainContainer.lastChild);
+				}
 			});
 		}
 
 		function getFilelist() {
-			fetch("filelist.json", { cache: "no-cache" }).then(data => {
+			fetch("/db?max_count=20", { cache: "no-cache" }).then(data => {
 				data.text().then(
 					jsonText => {
-						appendList(JSON.parse(jsonText).files);
+						try {
+							let output = JSON.parse(jsonText)["res"].map((el) => {
+								return {
+									"id": el[0],
+									"folder": el[1],
+									"filename": el[2],
+									"title": el[3],
+									"video_id": el[4],
+									"thumbnail_ext": el[5]
+								}
+							});
+							appendList(output);
+						} catch (e) {
+							console.log(e);
+						}
 					}
 				)
 			});
 		}
 
-		// getFilelist();
+		function initSSE() {
+			sse = new EventSource("/sse");
 
-		// const evtSource = new EventSource("/sse/");
+			sse.onopen = (event) => {
+				reconnect_timeout = 2000;
+			};
 
-		// evtSource.onmessage = (e) => {
-		// 	console.log(e);
-		// 	// `message: ${e.data}`
-		// };
+			sse.onmessage = (event) => {
+				appendList([JSON.parse(event.data)['data']]);
+			};
 
-		// const eventSource = new EventSource("/sse/");
-
-		// // Log something when the client connects to the server.
-		// eventSource.onconnect = (event) => console.log("connected to the server");
-
-		// // Log a message while closing the connection.
-		// eventSource.onclose = (event) => console.log("closing connection");
-
-		// // Log an error message on account of an error.
-		// eventSource.onerror = (event) => console.log("an error occured");
-
-		// // This is how you can attach an event listener to a custom event.
-		// // eventSource.addEventListener("start", (event) => {
-		// // 	console.log(`start event: ${event.data}`);
-		// // });
-
-		// // Log the default message.
-		// eventSource.onmessage = (event) => {
-		// 	console.log(`Default event: ${event.data}`);
-		// 	console.log((new Date(event.data * 1000)).toLocaleString())
-
-		// 	// Don't reconnect when the server closes the connection.
-		// 	if (event.data === "closing connection") {
-		// 		eventSource.close();
-		// 	}
-		// };
-
-		function startES() {
-			const es = new EventSource("/sse");
-			es.onopen = e => console.log("ES open");
-			es.onerror = e => console.log("ES error");
-			es.onmessage = e => console.log(e.data);
+			sse.onerror = (event) => {
+				sse.close();
+				setTimeout(reconnect, reconnect_timeout);
+			};
 		}
 
-		startES();
+		function reconnect() {
+			if (reconnect_timeout < 60000) {
+				reconnect_timeout += (Math.random() * 2000) + 3000;
+			}
+			initSSE();
+		}
 	</script>
 </body>
 

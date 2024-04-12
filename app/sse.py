@@ -86,6 +86,7 @@ async def db(request):
 			max_row = int(request.query_params['max_row'])
 		if 'max_count' in params:
 			max_count = int(request.query_params['max_count'])
+
 		res = await fetch_rows(min_row=min_row, max_row=max_row, max_count=max_count)
 	except Exception as e:
 		print('Failed DB request:', e)

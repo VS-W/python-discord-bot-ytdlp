@@ -2,10 +2,12 @@ import asyncio, json, os, time
 from base64 import urlsafe_b64encode
 from hashlib import sha1
 from socket import socket
-from urllib.parse import quote as urlencode
+from urllib.parse import quote
+from re import sub
 
 import aiosqlite
 import discord
+import emoji
 import yt_dlp
 
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -87,6 +89,15 @@ class Logger(object):
 		self.push_to_output(msg)
 	def error(self, msg):
 		self.push_to_output(msg)
+		
+def send_sse(message):
+	client_socket = socket()
+	client_socket.connect(('0.0.0.0', 6000))
+
+	print(f'>>> Sending: {message}')
+	client_socket.send(message.encode())
+
+	client_socket.close()
 
 async def setup_db():
 	async with aiosqlite.connect("downloads.db") as db:
@@ -101,15 +112,6 @@ async def setup_db():
 			)
 		''')
 
-def send_sse(message):
-	client_socket = socket()
-	client_socket.connect(('0.0.0.0', 6000))
-
-	print(f'>>> Sending: {message}')
-	client_socket.send(message.encode())
-
-	client_socket.close()
-
 async def insert_row(video_info_obj):
 	async with aiosqlite.connect("downloads.db") as db:
 		cursor = await db.execute(f'''
@@ -120,20 +122,15 @@ async def insert_row(video_info_obj):
 				video_id,
 				thumbnail_ext
 			)
-			VALUES (
-				"{video_info_obj["folder"]}",
-				"{video_info_obj["filename"]}",
-				"{video_info_obj["title"]}",
-				"{video_info_obj["video_id"]}",
-				"{video_info_obj["thumbnail_ext"]}"
-			)
-		''')
+			VALUES (?, ?, ?, ?, ?)
+		''', [video_info_obj["folder"], video_info_obj["filename"], video_info_obj["title"], video_info_obj["video_id"], video_info_obj["thumbnail_ext"]])
+
 		await db.commit()
-		video_info_obj = {
+
+		return {
 			"data": video_info_obj,
 			"id": cursor.lastrowid
 		}
-	return video_info_obj
 
 @client.event
 async def on_ready():
@@ -151,7 +148,6 @@ async def on_message(message):
 			videourl = message.content[4:]
 
 			msg_content = f'Attempting to DL: <{videourl}>'
-			print(msg_content)
 			prog_msg = await message.channel.send(msg_content)
 
 			loop = asyncio.get_running_loop()
@@ -175,7 +171,8 @@ async def on_message(message):
 				path = title + video_id
 				video_string_hash = urlsafe_b64encode(sha1(path.encode('utf-8')).digest()).decode('utf-8')[:-1]
 				path = 'downloads/' + video_string_hash + '/'
-				opts['outtmpl']['default'] = opts['outtmpl']['default'].replace('downloads/', path, 1)
+				filename = await loop.run_in_executor(None, lambda: ydl.prepare_filename(info))
+				opts['outtmpl']['default'] = path + sub(r'[^\w.-]', '_', filename)
 				os.makedirs(path, exist_ok=True)
 
 			with yt_dlp.YoutubeDL(opts) as ydl:
@@ -188,17 +185,17 @@ async def on_message(message):
 					target = filename.replace('downloads/', '', 1)
 					ddl_target = filename.replace('downloads/', 'ddl/', 1)
 
-					public_filename = f"http://{PUBLIC_ADDRESS}/{urlencode(target)}"
-					ddl_filename = f"http://{PUBLIC_ADDRESS}/{urlencode(ddl_target)}"
+					public_filename = f'http://{PUBLIC_ADDRESS}/{quote(target)}'
+					ddl_filename = f'http://{PUBLIC_ADDRESS}/{quote(ddl_target)}'
 
-					await message.channel.send(f'[{title}]({public_filename}) ([download](<{ddl_filename}>))')
+					await message.channel.send(f'[{emoji.demojize(title, delimiters=("[", "]"))}]({public_filename}) ([download](<{ddl_filename}>))')
 				else:
 					public_filename = filename
 					await message.channel.send(f'{public_filename}')
 
 			output_info = {}
 			output_info['folder'] = video_string_hash
-			output_info['filename'] = filename.replace('downloads/', '')
+			output_info['filename'] = filename.replace('downloads/', '', 1)
 			output_info['title'] = info['title']
 			output_info['video_id'] = info['id']
 			output_info['thumbnail_ext'] = ""
@@ -211,7 +208,10 @@ async def on_message(message):
 			print(output_info)
 			with open('downloads/' + video_string_hash + '/info.json', 'w') as f:
 				json.dump(output_info, f, indent=4)
-
+			
+			inserted_row = await insert_row(output_info)
+			send_sse(json.dumps(inserted_row))
+			
 # TODO: remove, temporarily writing to a file to rebuild db from
 # future rebuilds should be done using the info.json files written with each new download
 			with open('downloads/filelist.json', 'r+') as f:
@@ -220,10 +220,6 @@ async def on_message(message):
 				f.seek(0)
 				json.dump(files_arr, f, indent=4)
 				f.truncate()
-			
-			inserted_row = await insert_row(output_info)
-			send_sse(json.dumps(inserted_row))
-
 	except Exception as e:
 		print('Error attempting to download video:')
 		print(e)
@@ -237,9 +233,6 @@ async def on_message(message):
 
 async def main():
 	await setup_db()
-	# loop = asyncio.get_event_loop()
-	# discordbot = loop.create_task(client.start(TOKEN))
-	# await asyncio.wait([discordbot])
 
 # TODO: remove, temporarily dropping and rebuilding from a list
 	async with aiosqlite.connect("downloads.db") as db:
@@ -249,11 +242,15 @@ async def main():
 	await setup_db()
 
 	imported = []
-	with open('downloads/filelist.json', 'r+') as f:
+	with open('downloads/filelist.json', 'r') as f:
 		files_arr = json.load(f)
 		imported = files_arr["files"]
 
 	for info in imported:
 		await insert_row(info)
+
+	loop = asyncio.get_event_loop()
+	discordbot = loop.create_task(client.start(TOKEN))
+	await asyncio.wait([discordbot])
 
 asyncio.run(main())

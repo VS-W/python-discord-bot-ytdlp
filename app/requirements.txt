@@ -1,5 +1,6 @@
 aiosqlite
 discord.py
+emoji
 starlette
 sse-starlette
 uvicorn

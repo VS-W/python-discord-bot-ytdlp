@@ -2,8 +2,6 @@
 	"quiet": true,
 	"no_warnings": true,
 	"restrictfilenames": true,
-	"outtmpl": "downloads/%(uploader)s-%(title)s.%(ext)s",
-	"writethumbnail": true,
-	"format": "bestvideo[vcodec^=avc1][filesize<?100M][ext=mp4]+bestaudio[acodec^=mp4a]/best",
-	"ratelimit": 10000000
+	"outtmpl": "%(uploader)s-%(title)s.%(ext)s",
+	"writethumbnail": true
 }
