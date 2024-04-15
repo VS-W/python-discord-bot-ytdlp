@@ -12,7 +12,7 @@ Run the following to see your IDs:
     echo User ID: $(id -u)
     echo Group ID: $(id -g)
 
-  
+
 Get your discord token from [here](https://discordapp.com/developers/applications):
 
  - Create an application. Go to the "Bot" tab.
@@ -27,14 +27,15 @@ Example running on 162.168.56.52 port 8500:
 
     version: "3"
     services:
-      dsc-yt-bot:
+      dscytbot:
         build:
           context: .
           args:
             USER_ID: 1000
             GROUP_ID: 1000
         volumes:
-          - .:/app
+          - ./app:/app
+          - ./downloads:/app/downloads
         environment:
           PUBLIC_ADDRESS: "162.168.56.52:8500"
           DISCORD_TOKEN: "J8BDCVIspV60BroJPBCQAtucGr2muxaA70Mbtb003h0gJ2gZ5AjBu5kGVBjfRvCUYUuKWg8d"
@@ -49,6 +50,7 @@ Example running on 162.168.56.52 port 8500:
           - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
         restart: always
 
+
 Change the value of the "QUIET" variable to false if you want to see most of the relevant output of the Youtube-DLP call in the message from the bot, otherwise it will only emit the title, download progress, current status, and any errors.
 
 Back on your server, run the following in the same directory you cloned the repo to:
@@ -62,12 +64,13 @@ In your Discord channel with the bot invited, command:
     !yt VIDEO_URL
 
 
+Works for anything YT-DLP can download, e.g.:
+![](sample/sample.png)
+
 Should output the videos to the "downloads" directory.
 
-A [web server](https://github.com/joseluisq/static-web-server) is deployed listening on port 5000 - modify this in docker-compose.yml, if necessary. Should provide a simple file listing with links for all of the videos in that "downloads" directory, updates via simple polling of the index created by the bot when it downloads a new video (will update to using sockets later on).
-
-Works for anything YT-DLP can download, e.g.:
-![](sample.png)
+A web server is deployed listening on port 5000 - modify this in docker-compose.yml, if necessary. Provides a listing of the downloaded videos as depicted below; basic pagination features, utilizes server-sent events to update the page when new videos are downloaded.
+![](sample/web_sample.png)
 
 # Options
 Arguments can be added to the options.json file, in JSON format. See [here](https://github.com/yt-dlp/yt-dlp/blob/master/yt_dlp/YoutubeDL.py) for the options available.
@@ -89,5 +92,6 @@ Restricting the format to H264 in an MP4 container and approximately 100M in siz
 
 * It is only serving files over http - the direct download links will display warnings in browsers since it's not secure.
 * Works without a domain (i.e. using only the server IP), but with the caveat that the embedded videos will not play properly directly Discord - clicking the link the bot generates still renders a playable video, however.
+* The file "info.json" is written to each folder containing the relevant details about each download, and also pushed to an sqlite database, which is how the index page is built/paginated. The database can be re-built using these info files if necessary.
 
 Personally running it on an existing server proxied behind nginx and Cloudflare handling certs and redirecting to https.
