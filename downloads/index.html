@@ -5,7 +5,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	
-	<link rel="shortcut icon" href="data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAADsUlEQVRYw7WXy28bVRSHv3l4PH5M4oRkrsi0FY+UlhSVt1ggoSIqoCCxqZBYwIo/gEpsuikbBAgVsYA/oAs2rNiAoErTRRFIVBQIUtMFqyjpVJ1R4jzscZxxZoaF7WTijONH7bM85/h+5/x879xzJfow17F14HVgpuFaiGBWCGu717WkHsEa8BFwERhvCa8Cn0VI3wgxFQy8ANexHwN+AJ7ukHoTeNcU1nI368pdwl8GbiXBgx2fzY37hOFu0y8Bf7iO/cxACmjAZ4GxpHitVsXfLlPxinH3FHDddezTD1SA69jHgZ+AbLscRdXqSgR+a2gc+Nl17KOHMdruAdexDeAf4PE6oMbm+j0kWaEwdmRfbrVaQlVSqCk9aalbwCumsLZ6VeBKEw7glVcIghqKrB5I1HWjHRzgBeByTwq4jv0+8F3cVy6tEEUBufwEsqzQh71lCuuXjgW4jj0B/EebTXeYRVFEEPioajopvATMmMLy4s6kv+DLfuBhGLBeXGK9uIzvV5JSjgGfHKpA49j82yscoOKtUfFWUZQUhfGjSFLi9qoCT5rCWmw6WnfUp62/8P0K1a0NJEkml38IOWETAqT1PLIsk9aNdnAAHbgEfHhAgXbdb6zdpVarAmCMCNK60Y9AcQuA6aYK8XYuJGVn8ia/XvuRbb+GnhnpmnJi+gkeOXaEMAzQtExcFaXBurCrgOvYY4ANZFoX+mv+bz6+fLHnNg09y5UvvgIgpWUZLUzFw2uAZQprq1nW+SQ4gF+r9aVzqVpBS+fRtBzZ7IFDNQa8A3vH8HxflE4qjApGCg+T0hJ7ew9Adpx7KeDVYRTQwc66zl1ZlYheBA58usIwIAx3iKJwWAXkQXpeBU61RipekYq3BkSUNu8PU4XTMvXhYdeqWxuN4SIaKMnf9lqHFgBLBfZNEjV/79pWUzp5w3xgeLVaorzpAKBnRuO36Y4K/BlPzhmTpNI5FFklpWWQZXsA3ZcByBuTrVf5TdkU1hww3/TIsoKuG+2OTl9mjAjGJx5Fz4zG3fOmsK43vwMfAF7vS3dnkiS3du41mPUPkSms28CbwMqwiojZKvBGg7k3kJjC+g14Drg6RPhV4FlTWL83HfsublNYy6awzlF/990YIPhGo+tzrS+mxMnBFNY1U1hngOnFpcXv+8ZGXAKOm8I6YwprNiml49tw5uypSeBb4G0g3yV6Ffj6ztzC550Su36cnnjtpKRIylPASerXaQFojkcVoAisAwt35hZud7vu/028G+jXb+4+AAAAAElFTkSuQmCC" />
+	<link rel="shortcut icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjgiIGhlaWdodD0iMTI4IiB2aWV3Qm94PSIwIDAgMzMuODY3IDMzLjg2NyIgc3Ryb2tlPSIjMDAwIiB4bWxuczp2PSJodHRwczovL3ZlY3RhLmlvL25hbm8iPjxwYXRoIGQ9Ik0zMi45NzEgMjguNzE3Yy0zLjE5NCA1LjUzMi0yOC43NDMgNS41MzItMzEuOTM3IDBTMTAuNjE1IDEuMDU5IDE3LjAwMiAxLjA1OXMxOS4xNjIgMjIuMTI3IDE1Ljk2OSAyNy42NTh6IiBmaWxsPSIjZTZlNmU2IiBzdHJva2Utd2lkdGg9Ii4wMDEiLz48cGF0aCBkPSJNMjIuNTg5IDMyLjYxM2MtLjYzMi43NzMtMTAuNTQxLjc3My0xMS4xNzMgMHMtLjYzMi0xMi44ODQgMC0xMy42NTYgMTAuNTQxLS43NzMgMTEuMTczIDAgLjYzMiAxMi44ODQgMCAxMy42NTZ6IiBmaWxsPSIjMzMzIiBzdHJva2Utd2lkdGg9Ii4wMDIiLz48L3N2Zz4=" />
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
@@ -49,7 +49,7 @@
 		}
 
 		.outercontainer > a:hover {
-			border: 2px #704a86 solid;
+			border: 2px #e4b5ff solid;
 		}
 
 		.namecontainer {
@@ -76,18 +76,143 @@
 			max-height: 141px;
 			object-fit: cover;
 		}
+
+		#nav {
+			display: flex;
+			flex-direction: row;
+			width: 90%;
+			justify-content: space-evenly;
+			align-items: center;
+		}
+		.nav-page {
+			font-family: "Nunito", sans-serif;
+			color: white;
+			font-size: 1em;
+			text-decoration: none;
+		}
+		.nav-page:hover {
+			font-family: "Nunito", sans-serif;
+			color: #e4b5ff;
+			font-size: 1em;
+		}
+		.hidden {
+			visibility: hidden;
+		}
 	</style>
 </head>
-
 <body>
-	<h1>Downloads</h1>
+	<div id="nav">
+		<a class="nav-page hidden" id="prev" href="#">⮜ Previous</a>
+		<h1>Downloads</h1>
+		<a class="nav-page hidden" id="next" href="#">Next ⮞</a>
+	</div>
 	<div id="container"></div>
 	<script>
 		let logged = [];
 		let reconnect_timeout = 2000;
+		let db_max = 1;
 
-		getFilelist();
+		getFilelist('max_count=20').then((res) => {
+			replaceList(buildLinks(res));
+		});
+
 		setTimeout(initSSE, 2000);
+		initNavButtons();
+
+		function initNavButtons() {
+			document.getElementById('next').addEventListener('click', (e) => {
+				e.preventDefault();
+				logged = [];
+				let range = getRange();
+				getFilelist(`max_row=${range.nextPage[0]}&min_row=${range.nextPage[1]}`).then((res) => {
+					replaceList(buildLinks(res));
+				});
+			});
+			document.getElementById('prev').addEventListener('click', (e) => {
+				e.preventDefault();
+				logged = [];
+				let range = getRange();
+				getFilelist(`max_row=${range.prevPage[0]}&min_row=${range.prevPage[1]}`).then((res) => {
+					if (res.length < 20 && res[0].id > 20) {
+						getFilelist(`max_row=${res[0].id}`).then((res) => {
+							replaceList(buildLinks(res));
+						});
+					} else {
+						replaceList(buildLinks(res));
+					}
+				});
+			});
+		}
+
+		function getRange() {
+			let elArr = document.querySelectorAll('.outercontainer');
+			let idArr = [];
+			elArr.forEach(el => {
+				idArr.push(el.getAttribute('seq_id'));
+			});
+			if (idArr.length > 0) {
+				let max = Math.max(...idArr);
+				let min = Math.min(...idArr);
+				let nextPage = [min - 1, min - 20];
+				let prevPage = [max + 20, max + 1];
+				return {
+					'max': max,
+					'min': min,
+					'nextPage': nextPage,
+					'prevPage': prevPage,
+					'count': idArr.length
+				}
+			} else {
+				return {
+					'max': 1,
+					'min': 1,
+					'nextPage': [1, 1],
+					'prevPage': [1, 1],
+					'count': 0
+				}
+			}
+		}
+
+		function navButtons() {
+			let range = getRange();
+
+			if (range['min'] > 1) {
+				showEl('next');
+			} else {
+				hideEl('next');
+			}
+
+			if (db_max > range['max']) {
+				showEl('prev');
+			} else {
+				hideEl('prev');
+			}
+		}
+
+		function hideEl(id) {
+			document.getElementById(id).classList.add('hidden');
+		}
+
+		function showEl(id) {
+			document.getElementById(id).classList.remove('hidden');
+		}
+
+		function appendList(elArr) {
+			let mainContainer = document.querySelector('#container');
+			elArr.forEach(el => {
+				mainContainer.prepend(el);
+				if (mainContainer.children.length > 20) {
+					mainContainer.removeChild(mainContainer.lastChild);
+				}
+			});
+			navButtons();
+		}
+
+		function replaceList(elArr) {
+			let mainContainer = document.querySelector('#container');
+			mainContainer.replaceChildren(...elArr);
+			navButtons();
+		}
 
 		function stripExtension(filename) {
 			const lastDotIndex = filename.lastIndexOf('.');
@@ -97,27 +222,24 @@
 			return filename.slice(0, lastDotIndex);
 		}
 
-		function appendList(arr) {
+		function buildLinks(arr) {
 			let newArr = [];
-			arr.sort((a, b) => {
-				return a.id - b.id;
-			}).forEach(el => {
-				if (!logged.includes(el["folder"])) {
-					logged.push(el["folder"]);
-					let elObj = {
-						name: el["title"],
-						url: encodeURIComponent(el["filename"]),
-						id: el['id']
-					};
+			arr.forEach(el => {
+				if (!logged.includes(el['folder'])) {
+					logged.push(el['folder']);
 
-					if (el["thumbnail_ext"]) {
-						elObj["thumbnail"] = stripExtension(encodeURIComponent(el["filename"])) + "." + el["thumbnail_ext"];
-					}
+					el['filename'] = encodeURIComponent(el['filename']);
+					let elObj = {
+						name: el['title'],
+						url: el['filename'],
+						id: el['id'],
+						thumbnail: stripExtension(el['filename']) + '.' + el['thumbnail_ext']
+					};
 					newArr.push(elObj);
 				}
 			});
 
-			newArr.forEach(el => {
+			return newArr.map(el => {
 				let linkContainer = document.createElement('a');
 				linkContainer.href = el.url;
 
@@ -139,47 +261,50 @@
 				outerContainer.classList.add('outercontainer');
 				outerContainer.append(linkContainer);
 
-				let mainContainer = document.querySelector('#container');
-				mainContainer.prepend(outerContainer);
-				if (mainContainer.children.length > 20) {
-					mainContainer.removeChild(mainContainer.lastChild);
-				}
+				outerContainer.setAttribute('seq_id', el['id']);
+
+				return outerContainer;
 			});
 		}
 
-		function getFilelist() {
-			fetch("/db?max_count=20", { cache: "no-cache" }).then(data => {
-				data.text().then(
-					jsonText => {
-						try {
-							let output = JSON.parse(jsonText)["res"].map((el) => {
-								return {
-									"id": el[0],
-									"folder": el[1],
-									"filename": el[2],
-									"title": el[3],
-									"video_id": el[4],
-									"thumbnail_ext": el[5]
-								}
-							});
-							appendList(output);
-						} catch (e) {
-							console.log(e);
-						}
+		async function getFilelist(query) {
+			return fetch('/db?' + query, { cache: 'no-cache' }).then(data => {
+				return data.text();
+			}).then(text => {
+				let output = JSON.parse(text)['res'].map((el) => {
+					if (el[0] > db_max) {
+						db_max = el[0];
 					}
-				)
+					return {
+						'id': el[0],
+						'folder': el[1],
+						'filename': el[2],
+						'title': el[3],
+						'video_id': el[4],
+						'thumbnail_ext': el[5]
+					}
+				});
+				return output;
 			});
 		}
 
 		function initSSE() {
-			sse = new EventSource("/sse");
+			sse = new EventSource('/sse');
 
 			sse.onopen = (event) => {
 				reconnect_timeout = 2000;
 			};
 
 			sse.onmessage = (event) => {
-				appendList([JSON.parse(event.data)['data']]);
+				let inputData = JSON.parse(event.data)['data'];
+
+				let range = getRange();
+				if (range['max'] == db_max) {
+					db_max = inputData['id'];
+					appendList(buildLinks([inputData]));
+				} else {
+					db_max = inputData['id'];
+				}
 			};
 
 			sse.onerror = (event) => {

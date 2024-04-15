@@ -198,7 +198,8 @@ async def on_message(message):
 			output_info['filename'] = filename.replace('downloads/', '', 1)
 			output_info['title'] = info['title']
 			output_info['video_id'] = info['id']
-			output_info['thumbnail_ext'] = ""
+			output_info['thumbnail_ext'] = ''
+			output_info['time'] = time.time()
 			
 			for line in logger.output_msgs:
 				if 'Writing video thumbnail' in line:
@@ -211,15 +212,6 @@ async def on_message(message):
 			
 			inserted_row = await insert_row(output_info)
 			send_sse(json.dumps(inserted_row))
-			
-# TODO: remove, temporarily writing to a file to rebuild db from
-# future rebuilds should be done using the info.json files written with each new download
-			with open('downloads/filelist.json', 'r+') as f:
-				files_arr = json.load(f)
-				files_arr["files"].append(output_info)
-				f.seek(0)
-				json.dump(files_arr, f, indent=4)
-				f.truncate()
 	except Exception as e:
 		print('Error attempting to download video:')
 		print(e)
@@ -233,21 +225,6 @@ async def on_message(message):
 
 async def main():
 	await setup_db()
-
-# TODO: remove, temporarily dropping and rebuilding from a list
-	async with aiosqlite.connect("downloads.db") as db:
-		await db.execute('''
-			DROP TABLE downloads;
-		''')
-	await setup_db()
-
-	imported = []
-	with open('downloads/filelist.json', 'r') as f:
-		files_arr = json.load(f)
-		imported = files_arr["files"]
-
-	for info in imported:
-		await insert_row(info)
 
 	loop = asyncio.get_event_loop()
 	discordbot = loop.create_task(client.start(TOKEN))

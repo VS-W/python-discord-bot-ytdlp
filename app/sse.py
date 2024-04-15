@@ -17,6 +17,7 @@ async def handle_client(reader, writer):
 		request = json.loads(request)
 		if request['id'] > 0:
 			updated['last_id'] = request['id']
+			request['data']['id'] = request['id']
 			updated['data'] = request['data']
 	except Exception as e:
 		print(f'Failed request:')
@@ -30,14 +31,16 @@ async def run_server():
 async def fetch_rows(min_row=0, max_row=None, max_count=100):
 	if max_count > 100:
 		max_count = 100
+	if min_row < 0:
+		min_row = 0
 
 	async with aiosqlite.connect("downloads.db") as db:
 		if min_row == 0 and not max_row:
 			output = await db.execute(f'''
 				SELECT * FROM downloads
 				ORDER BY rowid DESC
-				LIMIT {max_count};
-			''')
+				LIMIT ?;
+			''', [max_count])
 		else:
 			if not max_row:
 				max_row = await db.execute('''
@@ -50,10 +53,10 @@ async def fetch_rows(min_row=0, max_row=None, max_count=100):
 
 			output = await db.execute(f'''
 				SELECT * FROM downloads
-				WHERE rowid BETWEEN {min_row} AND {max_row}
+				WHERE rowid BETWEEN ? AND ?
 				ORDER BY rowid DESC
-				LIMIT {max_count};
-			''')
+				LIMIT ?;
+			''', [min_row, max_row, max_count])
 
 		output = await output.fetchall()
 
@@ -70,12 +73,12 @@ async def sse(request):
 					yield dict(data=json.dumps(updated))
 		except asyncio.CancelledError:
 			pass
-	return EventSourceResponse(msg_socket(), send_timeout=180)
+	return EventSourceResponse(msg_socket(), send_timeout=60)
 
 async def db(request):
 	min_row = 0
 	max_row = None
-	max_count = 10
+	max_count = 20
 	res = []
 		
 	try:
