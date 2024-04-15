@@ -181,7 +181,7 @@ async def on_message(message):
 
 				await logger.update_msg("Download completed.")
 
-				if PUBLIC_ADDRESS and PUBLIC_ADDRESS != 'YourPublicWebAddressHere':
+				if PUBLIC_ADDRESS:
 					target = filename.replace('downloads/', '', 1)
 					ddl_target = filename.replace('downloads/', 'ddl/', 1)
 
