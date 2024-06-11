@@ -1,6 +1,7 @@
 import asyncio, json, os, time
-from base64 import urlsafe_b64encode
+from base64 import urlsafe_b64encode, b64decode
 from hashlib import sha1
+from io import BytesIO
 from socket import socket
 from urllib.parse import quote
 from re import sub
@@ -137,6 +138,10 @@ async def on_ready():
 	print(f'{client.user} is connected to the following guilds:')
 	for guild in client.guilds:
 		print(f'{guild.name} (id:{guild.id})')
+
+	icon = "iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAMAAAD04JH5AAAAxlBMVEUAAADm5uYzMzMEBAQICAgLCwvT09Pd3d3Z2dnj4+Pf39/Ozs7V1dWysrJ/f387OzsrKyvh4eHJycnAwMBLS0sYGBi5ubmrq6uQkJCMjIxtbW1nZ2dAQEA4ODgTExPc3NzDw8O0tLSbm5tNTU1FRUUxMTEcHBwPDw+vr6+UlJSGhoZ7e3t2dnZvb29qampUVFRPT08oKCggICDGxsaioqJzc3NdXV1ISEgiIiK7u7umpqaYmJiDg4NZWVkjIyNhYWHQ0NBQUFA+UeieAAADAUlEQVR42u3Z127bMBQG4POTkiVLlveesR2v7L2apu37v1TbAB1IScYcUhGA34WvbJg6FHl+SuR5nud5nud9bLVFGs/vAvo/pictvIp3jIrH2wn+qBZehc4uwt+6EyrU+hFvREtOxRmn+EdyTEXh9zOIDEIqxsUMQuU+pwLwiwQy/SJqUIshVT4iCcf/L3fLKV/TJpQabcrVuot3JIeUpwXelYaUn7MG3pdNKS+H2EuVcrI5wF6iC8pF2MWeGivKwxB721IOLmPs74STa9MWNMwm5NptGTqykNyqJdAzKGYC5GK3kzCCtseCVoDckJzhPRhI1+TKfQQTO3IkLMFMm9yowtA8JBc6KUwtyYUBjJU6ZI/BwglZ4wtIFRIQ6xFsHJEl3oKVcj2/HFpMQl3AUomTjZcI/7cEGawlV2Ru0oC9oV0XsNciY0EKmUacHjzOs6zX22ZZt9UsJZBqOw5is+7g7J79Y3xX7ZXEJeBkZnMNgcYpk7oQjiBiZGacQKDSZnItiBw77cPpmMk9QaQUkImwApFmjcn1IXROJr5A6IApHEMo46SPzyG0ZQojSUN4IH1Xkix8wxQ+O9wK7ssQ+sQUlpD8yGEWHTAFWXyIOOniKcSemUINEmPStYLEMVMpO8uGQ2nSZioJxLKANN1A4papRBC7njp7KHjKVGYQq+juBJ0mJIZMJZbF85XuNlSBxBlTqQBu2sFlBIkRUylJZ4701MvSAZhV4NluAPZTcKQ7gIbVTWh/PnmJ3S5DfLFahvYbESakJ9i63Yq/rknTZ7NmBIknTpqCJ9ntbNKO47pBJLuGUF8ZSFy+xnrY6keybxApLTmZ2PQrLkJpMr8kU/VFGW9lTOFMcI5oh2RhtTvQOZhU3xa/d062puNFY++j2Q5/696tObmwaT/3mr8mIz1kcr3flz7v3z2QQzzsnPebr+FqyaQm16/fuBnVNwHlIXipnQ/HigGcjpaswylnfLO+XLE3VvWrTkBF4jz4IQx/fnJOnud5nud5nud5nvdhfQegvD7KXGmp7QAAAABJRU5ErkJggg=="
+	img_data = BytesIO(b64decode(icon))
+	await client.user.edit(avatar=img_data.read())
 
 @client.event
 async def on_message(message):
