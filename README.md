@@ -5,7 +5,7 @@ On your server, assuming it's Debian based (e.g. Ubuntu, Raspberry Pi, etc.):
     git clone https://github.com/VS-W/python-discord-bot-ytdlp
     cd python-discord-bot-ytdlp
 
-Replace the values for User ID/Group ID/DISCORD_TOKEN in docker-compose.yml with your own. Replace PUBLIC_ADDRESS with the address of your server, web server runs on port 5000 unless modified (e.g. "162.168.56.52:5000" or "subdomain.domain.tld").
+Replace the values for `User ID`/`Group ID`/`DISCORD_TOKEN` in `docker-compose.yml` with your own. Replace `PUBLIC_ADDRESS` with the address of your server, web server runs on port `5000 `unless modified (e.g. `162.168.56.52:5000` or `subdomain.domain.tld`).
 
 Run the following to see your IDs:
 
@@ -16,13 +16,13 @@ Run the following to see your IDs:
 Get your discord token from [here](https://discordapp.com/developers/applications):
 
  - Create an application. Go to the "Bot" tab.
- - Click "Add Bot" and copy  the token displayed, that's your "DISCORD_TOKEN" to paste into the docker-compose.yml file.
+ - Click "Add Bot" and copy  the token displayed, that's your `DISCORD_TOKEN` to paste into the `docker-compose.yml` file.
  - Go to the "OAuth2" tab.
  - Click "URL Generator" and check the box for "bot" in the "Scopes" field.
  - Under the "Bot Permissions" field, check "Read Messages/View Channels" and "Send Messages" - that's all this bot requires.
  - Scroll down and click "copy" on the generated URL, and open the URL in your web browser and authorize it.
  
-Example running on 162.168.56.52 port 8500:
+Example running on `162.168.56.52` port `8500`:
 
 
     version: "3"
@@ -51,7 +51,7 @@ Example running on 162.168.56.52 port 8500:
         restart: always
 
 
-Change the value of the "QUIET" variable to false if you want to see most of the relevant output of the Youtube-DLP call in the message from the bot, otherwise it will only emit the title, download progress, current status, and any errors.
+Change the value of the `QUIET` variable to false if you want to see most of the relevant output of the Youtube-DLP call in the message from the bot, otherwise it will only emit the title, download progress, current status, and any errors.
 
 Back on your server, run the following in the same directory you cloned the repo to:
 
@@ -69,13 +69,13 @@ Works for anything YT-DLP can download, e.g.:
 
 Should output the videos to the "downloads" directory.
 
-A web server is deployed listening on port 5000 - modify this in docker-compose.yml, if necessary. Provides a listing of the downloaded videos as depicted below; basic pagination features, utilizes server-sent events to update the page when new videos are downloaded.
+A web server is deployed listening on port `5000` - modify this in `docker-compose.yml`, if necessary. Provides a listing of the downloaded videos as depicted below; basic pagination features, utilizes server-sent events to update the page when new videos are downloaded.
 ![](sample/web_sample.png)
 
 # Options
-Arguments can be added to the options.json file, in JSON format. See [here](https://github.com/yt-dlp/yt-dlp/blob/master/yt_dlp/YoutubeDL.py) for the options available.
+Arguments can be added to the `options.json` file, in JSON format. See [here](https://github.com/yt-dlp/yt-dlp/blob/master/yt_dlp/YoutubeDL.py) for the options available.
 
-Example adding the options for "writedescription" and file "format":
+Example adding the options for `writedescription` and file `format`:
 
     {
         "quiet": true,
@@ -88,10 +88,31 @@ Example adding the options for "writedescription" and file "format":
 
 Restricting the format to H264 in an MP4 container and approximately 100M in size or less as in the above example seems work well for automatic embedding, with the obvious loss of quality for longer videos being forced into those constraints - fall back to just downloading the best available if that's not possible, since any video is better than none.
 
+# Cookies
+If you're running this on a server out of a datacenter, you'll more than likely need to pass cookies.
+
+Place your exported `cookies.txt` in the `app` folder and specify in the `options.json` file `"cookiefile": "cookies.txt"`, e.g.
+
+	> ls app/
+	bot.py
+	cookies.txt
+	downloads.db
+	options.json
+	...
+
+	> cat app/options.json
+	{
+        "quiet": true,
+        ...
+        "no_warnings": true,
+        "cookiefile": "cookies.txt"
+	}
+
+
 # Notes
 
 * It is only serving files over http - the direct download links will display warnings in browsers since it's not secure.
 * Works without a domain (i.e. using only the server IP), but with the caveat that the embedded videos will not play properly directly Discord - clicking the link the bot generates still renders a playable video, however.
-* The file "info.json" is written to each folder containing the relevant details about each download, and also pushed to an sqlite database, which is how the index page is built/paginated. The database can be re-built using these info files if necessary.
+* The file `info.json` is written to each folder containing the relevant details about each download, and also pushed to an sqlite database, which is how the index page is built/paginated. The database can be re-built using these info files if necessary.
 
 Personally running it on an existing server proxied behind nginx and Cloudflare handling certs and redirecting to https.
