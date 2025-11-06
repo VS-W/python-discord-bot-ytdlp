@@ -27,7 +27,9 @@ IGNORED_MSGS = [
 	"(frag",
 	"[youtube]",
 	"[info] Downloading video thumbnail",
-	"[info] Video Thumbnail"
+	"[info] Video Thumbnail",
+	"[hlsnative]",
+	"[FixupM3u8]"
 ]
 
 if QUIET:
